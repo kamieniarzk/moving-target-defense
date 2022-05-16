@@ -1,0 +1,4 @@
+### TODO
+* rozkminić jak dodać kilka plików konfiguracyjnych do kontenera z nginxem i później przełączać się między nimi (powinno działać po prostu `docker exec -it <container-id> nginx -c <file_path>`, ale mi dzisiaj pluło 'address already in use` mimo, że nie miałem żadnych innych procesów na tym porcie więc jest to do zbadania, sprawdź u siebie jak możesz) i jakbyś miał chwilę, to możesz się pobawić ogólnie z nginxem, tu jest reference do cli, jest przyjemne [https://www.nginx.com/resources/wiki/start/topics/tutorials/commandline/](https://www.nginx.com/resources/wiki/start/topics/tutorials/commandline/)
+* dodać `docker-compose.yml`
+* dodać dockerfile do daemona, nginxa i service (w service chyba kilka plików, każdy z innym OSem?)

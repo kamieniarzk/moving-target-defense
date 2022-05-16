@@ -1,0 +1,4 @@
+rootProject.name = 'spzc'
+include 'service'
+include 'daemon'
+
