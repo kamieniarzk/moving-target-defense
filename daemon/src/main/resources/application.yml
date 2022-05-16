@@ -1,0 +1,15 @@
+service:
+  healthCheck:
+    path: '/actuator/health'
+    rate: 3 # rate at which, service instances health status is checked (in seconds)
+  instances:
+    -
+      url: 'http://localhost:8080'
+      os: 'ubuntu'
+      configFileName: 'ubuntu.conf'
+      containerName: 'unknown'
+    -
+      url: 'http://localhost:8081'
+      os: 'fedora'
+      configFileName: 'fedora.conf'
+      containerName: 'unknown'
