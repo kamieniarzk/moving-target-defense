@@ -1,10 +1,10 @@
-package pl.edu.pw.service;
+package spzc.daemon;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ServiceApplicationTests {
+class DaemonApplicationTests {
 
   @Test
   void contextLoads() {
