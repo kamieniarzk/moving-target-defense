@@ -6,14 +6,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import spzc.daemon.monitoring.HealthChecker;
+import spzc.daemon.service.ConfigFileService;
+import spzc.daemon.service.InstanceHealthTracker;
 
 @Slf4j
 @RequiredArgsConstructor
 @SpringBootApplication
 public class DaemonApplication implements CommandLineRunner {
-
-  private final HealthChecker healthChecker;
+  private final DaemonProcess daemonProcess;
 
   public static void main(String[] args) {
     SpringApplication.run(DaemonApplication.class, args);
@@ -21,7 +21,7 @@ public class DaemonApplication implements CommandLineRunner {
 
   @Override
   public void run(final String... args) throws Exception {
-    healthChecker.scheduleHealthStatusUpdate();
+    daemonProcess.run();
     Thread.currentThread().join();
   }
 }

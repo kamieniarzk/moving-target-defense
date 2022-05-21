@@ -1,4 +1,4 @@
-package spzc.daemon.monitoring;
+package spzc.daemon.service;
 
 import java.io.IOException;
 import java.net.URI;
@@ -14,21 +14,26 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import spzc.daemon.monitoring.ServiceInstancePropertiesList.HealthCheckProperties;
+import spzc.daemon.domain.ServiceInstance;
+import spzc.daemon.domain.ServiceInstancePropertiesList;
+import spzc.daemon.domain.ServiceInstancePropertiesList.HealthCheckProperties;
 
 @Slf4j
 @Service
-public class HealthChecker {
+public class InstanceHealthTracker {
   private static final int OK_HTTP_STATUS = 200;
+  private static final int INSTANCE_DOWN_STATUS = -1;
   private static final int EXECUTOR_THREAD_COUNT = 5;
   private final HttpClient httpClient;
   @Getter
   private final List<ServiceInstance> serviceInstances;
   private final HealthCheckProperties healthCheckProperties;
 
-  public HealthChecker(ServiceInstancePropertiesList serviceInstanceProperties) {
+  public InstanceHealthTracker(ServiceInstancePropertiesList serviceInstanceProperties) {
     this.serviceInstances = serviceInstanceProperties.getInstances().stream()
         .map(instanceProperties -> new ServiceInstance(instanceProperties, true, true, true))
         .collect(Collectors.toUnmodifiableList());
@@ -37,29 +42,37 @@ public class HealthChecker {
   }
 
   public void scheduleHealthStatusUpdate() {
-    var executorService = Executors.newScheduledThreadPool(EXECUTOR_THREAD_COUNT);
+    var threadFactory = new ThreadFactoryBuilder().setNameFormat("health-service%d").build();
+    var executorService = Executors.newScheduledThreadPool(EXECUTOR_THREAD_COUNT, threadFactory);
     executorService.scheduleAtFixedRate(this::checkHealth, 0, healthCheckProperties.getRate(), TimeUnit.SECONDS);
   }
 
   public void checkHealth() {
+    log.info("Scheduled health check in progress.");
     serviceInstances.forEach(this::updateInstanceHealthStatus);
   }
 
   private void updateInstanceHealthStatus(ServiceInstance instance) {
     var httpRequest = HttpRequest.newBuilder()
         .GET()
-        .uri(URI.create(instance.getProperties().getOs() + healthCheckProperties.getPath()))
+        .uri(URI.create(instance.getProperties().getUrl() + healthCheckProperties.getPath()))
         .build();
 
-    var httpResponse = getHealthStatus(httpRequest);
-    httpResponse.ifPresent(stringHttpResponse -> instance.setUp(stringHttpResponse.statusCode() == OK_HTTP_STATUS));
+    var responseStatus = getHealthStatus(httpRequest)
+        .map(HttpResponse::statusCode)
+        .orElseGet(() -> {
+          log.warn("Service at [{}], os [{}] is down!", instance.getProperties().getUrl(), instance.getProperties().getOs());
+          return INSTANCE_DOWN_STATUS;
+        });
+
+    instance.setUp(responseStatus == OK_HTTP_STATUS);
   }
 
   private Optional<HttpResponse<String>> getHealthStatus(HttpRequest request) {
     try {
       return Optional.of(httpClient.send(request, BodyHandlers.ofString()));
     } catch (IOException | InterruptedException exception) {
-      log.warn("Exception caught while getting health status at {}", request.uri(), exception);
+      log.warn("Exception caught while getting health status at {}", request.uri());
       return Optional.empty();
     }
   }

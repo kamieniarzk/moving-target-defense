@@ -1,0 +1,12 @@
+FROM gradle:7.4.2-jdk11-alpine
+COPY --chown=gradle:gradle . /home/gradle/src
+WORKDIR /home/gradle/src
+RUN gradle build -x test --no-daemon; pwd; ls /home/gradle/src/build/libs/
+
+FROM openjdk:11-jre-slim-buster
+
+RUN mkdir /app
+
+COPY --from=0 /home/gradle/src/build/libs/src.jar /app/app.jar
+
+ENTRYPOINT ["java", "-jar","/app/app.jar"]

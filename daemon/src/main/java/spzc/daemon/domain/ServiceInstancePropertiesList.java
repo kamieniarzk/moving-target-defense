@@ -1,4 +1,4 @@
-package spzc.daemon.monitoring;
+package spzc.daemon.domain;
 
 import java.util.List;
 

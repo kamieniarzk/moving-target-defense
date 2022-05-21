@@ -1,9 +1,9 @@
-package spzc.daemon.monitoring;
+package spzc.daemon.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import spzc.daemon.monitoring.ServiceInstancePropertiesList.ServiceInstanceProperties;
+import spzc.daemon.domain.ServiceInstancePropertiesList.ServiceInstanceProperties;
 
 @Data
 @AllArgsConstructor

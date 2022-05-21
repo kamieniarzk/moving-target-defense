@@ -1,3 +1,7 @@
+rotation:
+  minRate: 60
+  maxRate: 180
+
 service:
   healthCheck:
     path: '/actuator/health'
@@ -5,11 +9,11 @@ service:
   instances:
     -
       url: 'http://localhost:8080'
-      os: 'ubuntu'
-      configFileName: 'ubuntu.conf'
-      containerName: 'unknown'
+      os: 'debian-buster'
+      configFileName: 'debian-buster.conf'
+      containerName: 'service-buster'
     -
       url: 'http://localhost:8081'
-      os: 'fedora'
-      configFileName: 'fedora.conf'
-      containerName: 'unknown'
+      os: 'debian-bullseye'
+      configFileName: 'debian-bullseye.conf'
+      containerName: 'service-bullseye'

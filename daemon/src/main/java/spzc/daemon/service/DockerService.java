@@ -1,4 +1,4 @@
-package spzc.daemon.exec;
+package spzc.daemon.service;
 
 import java.io.ByteArrayOutputStream;
 
@@ -12,12 +12,13 @@ import com.github.dockerjava.core.command.ExecStartResultCallback;
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
 
 import lombok.extern.slf4j.Slf4j;
-import spzc.daemon.monitoring.ServiceInstance;
 
 @Slf4j
 @Service
 public class DockerService {
-  private static final String NGINX_CONFIG_LOCATION = "/etc/nginx/";
+  private static final String NGINX_CONTAINER_NAME = "nginx"; // todo może dodać do enva?
+  private static final String NGINX_RELOAD_COMMAND = "nginx -s reload";
+  private static final String COMMAND_SEPARATOR = " ";
 
   private final DockerClient dockerClient;
 
@@ -30,11 +31,12 @@ public class DockerService {
     this.dockerClient = DockerClientImpl.getInstance(dockerClientConfig, dockerHttpClient);
   }
 
-  public boolean setLiveInstance(ServiceInstance serviceInstance) {
-    var filePath = NGINX_CONFIG_LOCATION + serviceInstance.getProperties().getConfigFileName();
-    var command = "nginx -c " + filePath;
-    var execCreateCmdResponse = getExecCreateCmdResponse(serviceInstance.getProperties().getContainerName(), command);
-    return executeCommand(execCreateCmdResponse);
+  /**
+   *
+   * @return true if reloaded successfully, false otherwise
+   */
+  public boolean reloadNginx() {
+    return executeCommand(getNginxReloadCommand());
   }
 
   private boolean executeCommand(ExecCreateCmdResponse execCreateCmdResponse) {
@@ -51,16 +53,18 @@ public class DockerService {
       log.warn("Exception occurred while trying to reload nginx config.", exception);
       return false;
     } finally {
-      log.info(stdOut.toString());
-      log.warn(stdErr.toString());
+      if (stdOut.size() != 0 || stdErr.size() != 0) {
+        log.info(stdOut.toString());
+        log.warn(stdErr.toString());
+      }
     }
   }
 
-  private ExecCreateCmdResponse getExecCreateCmdResponse(String containerId, String command) {
-    return dockerClient.execCreateCmd(containerId)
+  private ExecCreateCmdResponse getNginxReloadCommand() {
+    return dockerClient.execCreateCmd(NGINX_CONTAINER_NAME)
         .withAttachStdout(true)
         .withAttachStderr(true)
-        .withCmd(command.split(" "))
+        .withCmd(DockerService.NGINX_RELOAD_COMMAND.split(COMMAND_SEPARATOR))
         .exec();
   }
 }
