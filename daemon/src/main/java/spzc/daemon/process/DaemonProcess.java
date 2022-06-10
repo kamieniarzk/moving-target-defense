@@ -17,6 +17,7 @@ import spzc.daemon.service.IpTablesService;
 @Service
 @RequiredArgsConstructor
 public class DaemonProcess {
+
   private static final int MILIS_TO_SECONDS_RATIO = 1000;
   private final Timer timer = new Timer();
   private final IpTablesService ipTablesService;
@@ -29,12 +30,14 @@ public class DaemonProcess {
   }
 
   class Rotation extends TimerTask {
+
     private final Random randomGenerator = new Random();
     private String previousInstanceIp = "";
 
     @Override
     public void run() {
-      int delayInMilis = (rotationProperties.getMinRate() + randomGenerator.nextInt(rotationProperties.getMaxRate())) * MILIS_TO_SECONDS_RATIO;
+      int delayInMilis = (rotationProperties.getMinRate() + randomGenerator.nextInt(
+          rotationProperties.getMaxRate() - rotationProperties.getMinRate())) * MILIS_TO_SECONDS_RATIO;
       log.info("Scheduling next OS rotation in {} seconds", delayInMilis / 1000);
       timer.schedule(new Rotation(), delayInMilis);
       rotate();
