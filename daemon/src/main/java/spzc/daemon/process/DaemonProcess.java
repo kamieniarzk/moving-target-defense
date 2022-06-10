@@ -1,4 +1,4 @@
-package spzc.daemon;
+package spzc.daemon.process;
 
 import java.util.Random;
 import java.util.Timer;
@@ -42,9 +42,9 @@ public class DaemonProcess {
 
     private void rotate() {
       var randomlySelectedInstance = ranndomlySelectOtherInstance();
-      log.info("rotate to {}", randomlySelectedInstance);
       if (ipTablesService.setRoutingTo(randomlySelectedInstance.getProperties().getIp())) {
         randomlySelectedInstance.setLive(true);
+        log.info("Rotated to {}", randomlySelectedInstance.getProperties().getIp());
       }
     }
 

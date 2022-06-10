@@ -1,7 +1,6 @@
 package spzc.daemon.service;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -19,15 +18,12 @@ public class CommandExecutor {
 
   public boolean executeCommand(String command) throws IOException, InterruptedException {
     var builder = new ProcessBuilder();
-
     var commandSeparated = command.split(" ");
     builder.inheritIO().command(commandSeparated);
-    builder.directory(new File(System.getProperty("user.home")));
     var process = builder.start();
     var streamConsumer = new StreamConsumer(process.getInputStream(), log::info);
     Executors.newSingleThreadExecutor().submit(streamConsumer);
     int exitCode = process.waitFor();
-    log.info("exit code is: {}", exitCode);
     return exitCode == 0;
   }
 

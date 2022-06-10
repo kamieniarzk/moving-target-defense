@@ -22,7 +22,6 @@ public class IpTablesService {
       "iptables --table nat --append POSTROUTING --protocol ALL --destination ${SERVICE_IP} --jump SNAT --to-source ${PUBLIC_IP}";
   private static final String FLUSH_NAT_COMMAND = "iptables --table nat --flush";
 
-
   private final CommandExecutor commandExecutor;
   private String publicIp;
 
