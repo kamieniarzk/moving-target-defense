@@ -1,25 +1,23 @@
 package spzc.daemon;
 
-import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import spzc.daemon.domain.RotationProperties;
 import spzc.daemon.domain.ServiceInstance;
 import spzc.daemon.service.InstanceHealthTracker;
-import spzc.daemon.domain.RotationProperties;
 import spzc.daemon.service.IpTablesService;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class DaemonProcess {
-  public static final int MILIS_TO_SECONDS_RATIO = 1000;
+  private static final int MILIS_TO_SECONDS_RATIO = 1000;
   private final Timer timer = new Timer();
   private final IpTablesService ipTablesService;
   private final InstanceHealthTracker instanceHealthTracker;
@@ -30,9 +28,9 @@ public class DaemonProcess {
     new Rotation().run();
   }
 
-  // TODO do podrasowania, na razie co randomowy interwał czasu między minRate i maxRate i wybiera randomową instancję i routuje na nią
   class Rotation extends TimerTask {
     private final Random randomGenerator = new Random();
+    private String previousInstanceIp = "";
 
     @Override
     public void run() {
@@ -43,11 +41,21 @@ public class DaemonProcess {
     }
 
     private void rotate() {
-      var randomlySelectedInstance = randomlySelectInstance();
+      var randomlySelectedInstance = ranndomlySelectOtherInstance();
       log.info("rotate to {}", randomlySelectedInstance);
       if (ipTablesService.setRoutingTo(randomlySelectedInstance.getProperties().getIp())) {
         randomlySelectedInstance.setLive(true);
       }
+    }
+
+    private ServiceInstance ranndomlySelectOtherInstance() {
+      var otherInstance = randomlySelectInstance();
+
+      while (otherInstance.getProperties().getIp().equals(previousInstanceIp)) {
+        otherInstance = randomlySelectInstance();
+      }
+
+      return otherInstance;
     }
 
     private ServiceInstance randomlySelectInstance() {

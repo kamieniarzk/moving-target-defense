@@ -1,6 +1,6 @@
 rotation:
-  minRate: 60
-  maxRate: 180
+  minRate: 20
+  maxRate: 60
 
 service:
   healthCheck:
