@@ -38,6 +38,7 @@ public class IpTablesService {
   }
 
   public boolean setRoutingTo(String serviceIp) {
+    flushNatRules();
     try {
       var dnatCommand = commandExecutor.executeCommand(getDnatCommand(serviceIp));
       var snatCommand = commandExecutor.executeCommand(getSnatCommand(serviceIp));
@@ -47,15 +48,6 @@ public class IpTablesService {
       flushNatRules();
       return false;
     }
-//    boolean commandSuccess;
-//    try {
-//      commandSuccess = commandExecutor.executeCommand(routingCommand);
-//    } catch (IOException | InterruptedException e) {
-//      log.info("Exception caught while changing routing to {}", serviceIp);
-//      flushNatRules();
-//      return false;
-//    }
-//    return commandSuccess;
   }
 
   private void flushNatRules() {
