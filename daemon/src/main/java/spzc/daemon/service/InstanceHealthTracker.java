@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import spzc.daemon.domain.ServiceInstance;
 import spzc.daemon.domain.ServiceInstancePropertiesList;
 import spzc.daemon.domain.ServiceInstancePropertiesList.HealthCheckProperties;
+import spzc.daemon.domain.ServiceInstancePropertiesList.ServiceInstanceProperties;
 
 @Slf4j
 @Service
@@ -48,24 +49,44 @@ public class InstanceHealthTracker {
   }
 
   public void checkHealth() {
-    log.info("Scheduled health check in progress.");
+    log.debug("Scheduled health check in progress.");
     serviceInstances.forEach(this::updateInstanceHealthStatus);
+    logLiveInstances();
+  }
+
+  public List<ServiceInstance> getHealthyInstances() {
+    return getServiceInstances().stream()
+        .filter(ServiceInstance::getUp)
+        .collect(Collectors.toUnmodifiableList());
   }
 
   private void updateInstanceHealthStatus(ServiceInstance instance) {
-    var httpRequest = HttpRequest.newBuilder()
-        .GET()
-        .uri(URI.create(instance.getProperties().getUrl() + healthCheckProperties.getPath()))
-        .build();
-
+    var httpRequest = getHealthcheckHttpRequest(instance);
     var responseStatus = getHealthStatus(httpRequest)
         .map(HttpResponse::statusCode)
         .orElseGet(() -> {
-          log.warn("Service at [{}], os [{}] is down!", instance.getProperties().getUrl(), instance.getProperties().getOs());
+          log.warn("Service at [{}], os [{}] is down!", instance.getProperties().getIp(), instance.getProperties().getOs());
           return INSTANCE_DOWN_STATUS;
         });
 
     instance.setUp(responseStatus == OK_HTTP_STATUS);
+  }
+
+  private HttpRequest getHealthcheckHttpRequest(ServiceInstance instance) {
+    var healthcheckUrl = "http://" + instance.getProperties().getIp() + ":" + healthCheckProperties.getPort()  + healthCheckProperties.getPath();
+    return HttpRequest.newBuilder()
+        .GET()
+        .uri(URI.create(healthcheckUrl))
+        .build();
+  }
+
+  private void logLiveInstances() {
+    var upInstanceIps = getServiceInstances().stream().map(ServiceInstance::getProperties).map(ServiceInstanceProperties::getIp).collect(Collectors.toUnmodifiableList());
+    var upInstanceIpsString = new StringBuilder();
+    for (String instance : upInstanceIps) {
+      upInstanceIpsString.append("\n- ").append(instance);
+    }
+    log.debug("Live instances are: {}", upInstanceIpsString);
   }
 
   private Optional<HttpResponse<String>> getHealthStatus(HttpRequest request) {

@@ -6,14 +6,18 @@ service:
   healthCheck:
     path: '/actuator/health'
     rate: 3 # rate at which, service instances health status is checked (in seconds)
+    port: 8080
   instances:
     -
-      url: 'http://localhost:8080'
-      os: 'debian-buster'
-      configFileName: 'debian-buster.conf'
-      containerName: 'service-buster'
+      ip: '192.168.100.243'
+      os: 'fedora'
     -
-      url: 'http://localhost:8081'
-      os: 'debian-bullseye'
-      configFileName: 'debian-bullseye.conf'
-      containerName: 'service-bullseye'
+      ip: '192.168.100.244'
+      os: 'windows'
+    -
+      ip: '192.168.100.249'
+      os: 'ubuntu-server'
+
+logging:
+  level:
+    spzc.*: DEBUG

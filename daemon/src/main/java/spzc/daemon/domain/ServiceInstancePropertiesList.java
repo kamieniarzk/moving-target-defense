@@ -17,15 +17,14 @@ public class ServiceInstancePropertiesList {
 
   @Data
   public static class ServiceInstanceProperties {
-    private String url;
+    private String ip;
     private String os;
-    private String configFileName;
-    private String containerName;
   }
 
   @Data
   public static class HealthCheckProperties {
     private String path;
     private Integer rate;
+    private Integer port;
   }
 }
