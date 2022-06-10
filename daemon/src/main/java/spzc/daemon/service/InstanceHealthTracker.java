@@ -49,7 +49,6 @@ public class InstanceHealthTracker {
   }
 
   public void checkHealth() {
-    log.debug("Scheduled health check in progress.");
     serviceInstances.forEach(this::updateInstanceHealthStatus);
     logLiveInstances();
   }

@@ -1,9 +1,21 @@
-### TODO
-* uwspólnić build process dla serwisów (żeby podmieniać tylko os, a kod budować raz)
-* pozbyć się redundancji w konfigu (podawanie zahardkodowanych zmiennych)
+### Example DNAT/SNAT routing
+```shell
+sudo iptables \
+--table nat \
+--append PREROUTING \
+--protocol ALL \
+--destination 192.168.100.243 \
+--jump DNAT \
+--to-destination 192.168.100.244
 
-
-### Uruchamianie
-* `docker-compose up` - uruchamia nginx i serwisy
-* `./gradlew daemon:bootrun` - uruchamia proces daemona (kontrolera)
-* docelowo napisze się jakiś krótki `run.sh`, ale na razie do devu niech będzie ręcznie, bo czasami coś trzeba zdebugować
+sudo iptables \
+--table nat \
+--append POSTROUTING \
+--protocol ALL \
+--destination 192.168.100.244 \
+--jump SNAT \
+--to-source 192.168.100.243
+```
+#### Precondition
+Host must have `iptables` installed and `ip_forwarding` enabled. Can be enabled by adding the following line
+`net.ipv4.ip_forward=1` to `/etc/sysctl.conf` file.  (for the setting to take effect after appending file, run `sysctl -p`)

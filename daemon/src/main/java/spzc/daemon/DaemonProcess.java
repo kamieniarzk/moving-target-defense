@@ -55,6 +55,7 @@ public class DaemonProcess {
         otherInstance = randomlySelectInstance();
       }
 
+      previousInstanceIp = otherInstance.getProperties().getIp();
       return otherInstance;
     }
 
