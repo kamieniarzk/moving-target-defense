@@ -1,6 +1,6 @@
 rotation:
-  minRate: 10
-  maxRate: 20
+  minRate: 60
+  maxRate: 100
 service:
   healthCheck:
     path: '/actuator/health'
