@@ -5,6 +5,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +26,7 @@ public class TestController {
 
   @GetMapping("/students/long")
   public List<Student> getAllStudentsLong() throws InterruptedException {
-    Thread.sleep(1000);
+    Thread.sleep(500 + new Random().nextInt(1000));
     return testRepository.getStudents();
   }
 
@@ -41,7 +42,7 @@ public class TestController {
 
   @GetMapping("/courses/long")
   public List<Course> getAllCoursesLong() throws InterruptedException {
-    Thread.sleep(1000);
+    Thread.sleep(500 + new Random().nextInt(1000));
     return testRepository.getCourses();
   }
 
