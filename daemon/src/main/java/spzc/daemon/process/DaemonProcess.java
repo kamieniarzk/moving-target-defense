@@ -1,9 +1,15 @@
 package spzc.daemon.process;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -18,6 +24,7 @@ import spzc.daemon.service.IpTablesService;
 @RequiredArgsConstructor
 public class DaemonProcess {
 
+  private static final String ROTATION_LOG_FILE_NAME = "rotations.log";
   private static final int MILIS_TO_SECONDS_RATIO = 1000;
   private final Timer timer = new Timer();
   private final IpTablesService ipTablesService;
@@ -45,10 +52,23 @@ public class DaemonProcess {
 
     private void rotate() {
       var randomlySelectedInstance = ranndomlySelectOtherInstance();
-      if (ipTablesService.setRoutingTo(randomlySelectedInstance.getProperties().getIp())) {
+      var newIp = randomlySelectedInstance.getProperties().getIp();
+      if (ipTablesService.setRoutingTo(newIp)) {
         randomlySelectedInstance.setLive(true);
         log.info("Rotated to {}", randomlySelectedInstance.getProperties().getIp());
+        appendLogFile(newIp);
       }
+    }
+
+    private void appendLogFile(String ip) {
+      var timeStamp = new SimpleDateFormat("HH:mm:ss").format(new Date());
+      var file = new File(ROTATION_LOG_FILE_NAME);
+      try {
+        FileUtils.writeStringToFile(file, String.format("%s %s\n", timeStamp, ip), StandardCharsets.UTF_8, true);
+      } catch (IOException e) {
+        log.warn("Could not append log file.");
+      }
+
     }
 
     private ServiceInstance ranndomlySelectOtherInstance() {
