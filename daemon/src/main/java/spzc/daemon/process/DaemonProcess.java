@@ -30,6 +30,8 @@ public class DaemonProcess {
   private final IpTablesService ipTablesService;
   private final InstanceHealthTracker instanceHealthTracker;
   private final RotationProperties rotationProperties;
+  private final Random randomGenerator = new Random();
+  private String previousInstanceIp = "";
 
   public void run() {
     instanceHealthTracker.scheduleHealthStatusUpdate();
@@ -37,9 +39,6 @@ public class DaemonProcess {
   }
 
   class Rotation extends TimerTask {
-
-    private final Random randomGenerator = new Random();
-    private String previousInstanceIp = "";
 
     @Override
     public void run() {
@@ -51,17 +50,17 @@ public class DaemonProcess {
     }
 
     private void rotate() {
-      var randomlySelectedInstance = ranndomlySelectOtherInstance();
+      var randomlySelectedInstance = randomlySelectOtherInstance();
       var newIp = randomlySelectedInstance.getProperties().getIp();
       if (ipTablesService.setRoutingTo(newIp)) {
         randomlySelectedInstance.setLive(true);
         log.info("Rotated to {}", randomlySelectedInstance.getProperties().getIp());
-        appendLogFile(newIp);
+        appendLogFile(newIp, randomlySelectedInstance.getProperties().getOs());
       }
     }
 
-    private void appendLogFile(String ip) {
-      var timeStamp = new SimpleDateFormat("HH:mm:ss").format(new Date());
+    private void appendLogFile(String ip, String os) {
+      var timeStamp = new SimpleDateFormat("HH:mm:ss.SSS").format(new Date());
       var file = new File(ROTATION_LOG_FILE_NAME);
       try {
         FileUtils.writeStringToFile(file, String.format("%s %s\n", timeStamp, ip), StandardCharsets.UTF_8, true);
@@ -71,7 +70,7 @@ public class DaemonProcess {
 
     }
 
-    private ServiceInstance ranndomlySelectOtherInstance() {
+    private ServiceInstance randomlySelectOtherInstance() {
       var otherInstance = randomlySelectInstance();
 
       while (otherInstance.getProperties().getIp().equals(previousInstanceIp)) {
