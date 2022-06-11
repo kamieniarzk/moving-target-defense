@@ -63,7 +63,7 @@ public class DaemonProcess {
       var timeStamp = new SimpleDateFormat("HH:mm:ss.SSS").format(new Date());
       var file = new File(ROTATION_LOG_FILE_NAME);
       try {
-        FileUtils.writeStringToFile(file, String.format("%s %s\n", timeStamp, ip), StandardCharsets.UTF_8, true);
+        FileUtils.writeStringToFile(file, String.format("%s %s %s\n", timeStamp, ip, os), StandardCharsets.UTF_8, true);
       } catch (IOException e) {
         log.warn("Could not append log file.");
       }
