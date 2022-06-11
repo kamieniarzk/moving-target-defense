@@ -33,6 +33,7 @@ public class InstanceHealthTracker {
   @Getter
   private final List<ServiceInstance> serviceInstances;
   private final HealthCheckProperties healthCheckProperties;
+  private final Integer allInstancesCount;
 
   public InstanceHealthTracker(ServiceInstancePropertiesList serviceInstanceProperties) {
     this.serviceInstances = serviceInstanceProperties.getInstances().stream()
@@ -40,6 +41,7 @@ public class InstanceHealthTracker {
         .collect(Collectors.toUnmodifiableList());
     this.healthCheckProperties = serviceInstanceProperties.getHealthCheck();
     this.httpClient = HttpClient.newHttpClient();
+    this.allInstancesCount = serviceInstanceProperties.getInstances().size();
   }
 
   public void scheduleHealthStatusUpdate() {
@@ -50,7 +52,9 @@ public class InstanceHealthTracker {
 
   public void checkHealth() {
     serviceInstances.forEach(this::updateInstanceHealthStatus);
-    logLiveInstances();
+    if (getHealthyInstances().size() == allInstancesCount) {
+      log.info("All instances are up");
+    }
   }
 
   public List<ServiceInstance> getHealthyInstances() {
@@ -77,15 +81,6 @@ public class InstanceHealthTracker {
         .GET()
         .uri(URI.create(healthcheckUrl))
         .build();
-  }
-
-  private void logLiveInstances() {
-    var upInstanceIps = getServiceInstances().stream().map(ServiceInstance::getProperties).map(ServiceInstanceProperties::getIp).collect(Collectors.toUnmodifiableList());
-    var upInstanceIpsString = new StringBuilder();
-    for (String instance : upInstanceIps) {
-      upInstanceIpsString.append("\n- ").append(instance);
-    }
-    log.debug("Live instances are: {}", upInstanceIpsString);
   }
 
   private Optional<HttpResponse<String>> getHealthStatus(HttpRequest request) {
