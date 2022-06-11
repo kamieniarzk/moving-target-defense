@@ -18,6 +18,11 @@ public class TestController {
 
   private final TestRepository testRepository;
 
+  @GetMapping("/students")
+  public List<Student> getAllStudents() {
+    return testRepository.getStudents();
+  }
+
   @GetMapping("/students/long")
   public List<Student> getAllStudentsLong() throws InterruptedException {
     Thread.sleep(1000);
