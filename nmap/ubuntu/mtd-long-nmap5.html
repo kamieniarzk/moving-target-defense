@@ -1,0 +1,531 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:fo="http://www.w3.org/1999/XSL/Format">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--generated with nmap.xsl - version 0.9c by Benjamin Erb - http://www.benjamin-erb.de/nmap_xsl.php --><style type="text/css">
+/* stylesheet print */
+@media print
+{
+  #menu {
+    display:none;
+  }
+
+  body {
+    font-family: Verdana, Helvetica, sans-serif;
+  }
+  
+  h1 {
+    font-size: 13pt;
+    font-weight:bold;
+    margin:4pt 0pt 0pt 0pt;
+    padding:0;
+  }
+
+  h2 {
+    font-size: 12pt;
+    font-weight:bold;
+    margin:3pt 0pt 0pt 0pt;
+    padding:0;
+  }
+
+  h3, a:link, a:visited {
+    font-size: 9pt;
+    font-weight:bold;
+    margin:1pt 0pt 0pt 20pt;
+    padding:0;
+    text-decoration: none;
+    color: #000000;
+  }
+
+  p,ul {
+    font-size: 9pt;
+    margin:1pt 0pt 8pt 40pt;
+    padding:0;
+    text-align:left;
+  }
+
+  li {
+    font-size: 9pt;
+    margin:0;
+    padding:0;
+    text-align:left;
+  }
+
+  table {
+    margin:1pt 0pt 8pt 40pt;
+    border:0px;
+    width:90%
+  }
+
+  td {
+    border:0px;
+    border-top:1px solid black;
+    font-size: 9pt;
+  }
+
+  .head td {
+    border:0px;
+    font-weight:bold;
+    font-size: 9pt;
+  }
+  .noprint { display: none; }
+}
+
+/* stylesheet screen */
+@media screen
+{
+  body {
+    font-family: Verdana, Helvetica, sans-serif;
+    margin: 0px;
+    background-color: #FFFFFF;
+    color: #000000;
+    text-align: center;
+  }
+
+  #container {
+    text-align:left;
+    margin: 10px auto;
+    width: 90%;
+  }
+
+  h1 {
+    font-family: Verdana, Helvetica, sans-serif;
+    font-weight:bold;
+    font-size: 14pt;
+    color: #FFFFFF;
+    background-color:#2A0D45;
+    margin:10px 0px 0px 0px;
+    padding:5px 4px 5px 4px;
+    width: 100%;
+    border:1px solid black;
+    text-align: left;
+  }
+
+  h2 {
+    font-family: Verdana, Helvetica, sans-serif;
+    font-weight:bold;
+    font-size: 11pt;
+    color: #000000;
+    margin:30px 0px 0px 0px;
+    padding:4px;
+    width: 100%;
+    background-color:#F0F8FF;
+    text-align: left;
+  }
+
+  h2.green {
+    color: #000000;
+    background-color:#CCFFCC;
+    border-color:#006400;
+  }
+
+  h2.red {
+    color: #000000;
+    background-color:#FFCCCC;
+    border-color:#8B0000;
+  }
+   
+  h3 {
+    font-family: Verdana, Helvetica, sans-serif;
+    font-weight:bold;
+    font-size: 10pt;
+    color:#000000;
+    background-color: #FFFFFF;
+    width: 75%;
+    text-align: left;
+  }
+
+  p {
+    font-family: Verdana, Helvetica, sans-serif;
+    font-size: 8pt;
+    color:#000000;
+    background-color: #FFFFFF;
+    width: 75%;
+    text-align: left;
+  }
+
+  p i {
+    font-family: Verdana, Helvetica, sans-serif;
+    font-size: 8pt;
+    color:#000000;
+    background-color: #CCCCCC;
+  }
+
+  ul {
+    font-family: Verdana, Helvetica, sans-serif;
+    font-size: 8pt;
+    color:#000000;
+    background-color: #FFFFFF;
+    width: 75%;
+    text-align: left;
+  }
+
+  a {
+    font-family: Verdana, Helvetica, sans-serif;
+    text-decoration: none;
+    font-size: 8pt;
+    color:#000000;
+    font-weight:bold;
+    background-color: #FFFFFF;
+    color: #000000;
+  }
+
+  li a {
+    font-family: Verdana, Helvetica, sans-serif;
+    text-decoration: none;
+    font-size: 10pt;
+    color:#000000;
+    font-weight:bold;
+    background-color: #FFFFFF;
+    color: #000000;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  a.up {
+      color:#006400;
+  }
+
+  table {
+    width: 80%;
+    border:0px;
+    color: #000000;
+    background-color: #000000;
+    margin:10px;
+  }
+
+  tr {
+    vertical-align:top;
+    font-family: Verdana, Helvetica, sans-serif;
+    font-size: 8pt;
+    color:#000000;
+    background-color: #FFFFFF;
+  }
+
+  tr.head {
+    background-color: #E1E1E1;
+    color: #000000;
+    font-weight:bold;
+  }
+
+  tr.open {
+    background-color: #CCFFCC;
+    color: #000000;
+  }
+	
+  tr.script {
+    background-color: #EFFFF7;
+    color: #000000;
+  }
+
+  tr.filtered {
+    background-color: #F2F2F2;
+    color: #000000;
+  }
+
+  tr.closed {
+    background-color: #F2F2F2;
+    color: #000000;
+  }
+    
+  td {
+    padding:2px;
+  }
+        
+  #menu li {
+    display         : inline;
+    margin          : 0;
+    /*margin-right    : 10px;*/
+    padding         : 0;
+    list-style-type : none;
+  }    
+ 
+  #menubox {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    width: 120px;
+  }
+  
+  
+  
+  /* This section handle's IE's refusal to honor the fixed CSS attribute */
+  
+  * html div#menubox {
+    position: absolute;
+    top:expression(eval(
+      document.compatMode && document.compatMode=='CSS1Compat') ?
+      documentElement.scrollTop+(documentElement.clientHeight-this.clientHeight) 
+      : document.body.scrollTop +(document.body.clientHeight-this.clientHeight));
+  }
+  /* This fixes the jerky effect when scrolling in IE*/
+  * html,* html body {
+    background: #fff url(nosuchfile) fixed;
+  }
+
+  
+ 
+  .up {
+    color: #000000;
+    background-color:#CCFFCC;
+  }
+  
+  .down {
+    color:#626262;
+    background-color: #F2F2F2;
+  }
+
+  .print_only { display: none; }
+  .hidden { display: none; }
+  .unhidden { display: block; }
+  
+}
+</style>
+<title>Nmap Scan Report - Scanned at Sat Jun 11 20:26:48 2022</title>
+<script type="text/javascript">
+     
+      
+                
+      function toggle(divID) {
+        var item = document.getElementById(divID);
+        if (item) {
+          item.className=(item.className=='hidden')?'unhidden':'hidden';
+        }
+      }
+           
+      function togglePorts(tableID,portState) {
+        var table = document.getElementById(tableID);    
+        var tbody = table.getElementsByTagName("tbody")[0];
+        var rows = tbody.getElementsByTagName("tr");
+        for (var i=0; i < rows.length; i++) {
+          var value = rows[i].getElementsByTagName("td")[2].firstChild.nodeValue;
+          if (value == portState) {
+            rows[i].style.display = (rows[i].style.display == 'none')?'':'none';
+          }
+        }
+      }
+      
+      function toggleAll(portState) {
+        var allTables = document.getElementsByTagName("table");
+        for (var c=0; c < allTables.length; c++) {
+          if (allTables[c].id != "") {
+            togglePorts(allTables[c].id, portState)
+          }
+        }
+      }
+      
+      function init (){
+        toggleAll('closed');
+        toggleAll('filtered');     
+      }     
+            
+      window.onload = init; 
+      
+      
+    
+    </script>
+</head>
+<body>
+<a name="top"></a><div id="container">
+<h1>Nmap Scan Report - Scanned at Sat Jun 11 20:26:48 2022</h1>
+<ul id="menu">
+<li><a href="#scansummary">Scan Summary</a></li>
+<li> | <a href="#host_192_168_100_248" class="up">192.168.100.248</a>
+</li>
+</ul>
+<a name="scansummary"></a><hr class="print_only">
+<h2>Scan Summary</h2>
+<p>
+      Nmap 7.80 was initiated at Sat Jun 11 20:26:48 2022 with these arguments:<br><i>nmap -O -A -oX mtd-nmap-proper5.xml 192.168.100.248</i><br></p>
+<p>
+    Verbosity: 0; Debug level 0</p>
+<p>Nmap done at Sat Jun 11 20:27:13 2022; 1 IP address (1 host up) scanned in 25.22 seconds</p>
+<hr class="print_only">
+<a name="host_192_168_100_248"></a><h2 class="up">192.168.100.248<span class="print_only">(online)</span>
+</h2>
+<div id="hostblock_192.168.100.248" class="unhidden">
+<h3>Address</h3>
+<ul>
+<li>192.168.100.248
+            (ipv4)
+          </li>
+<li>08:00:27:E5:DB:4D - Oracle VirtualBox virtual NIC 
+            (mac)
+          </li>
+</ul>
+
+
+
+<h3>Ports</h3>
+<p>The 844 ports scanned but not shown below are in state: <b>closed</b></p>
+<ul><li><p>844 ports replied with: <b>resets</b></p></li></ul>
+<p>The 154 ports scanned but not shown below are in state: <b>filtered</b></p>
+<ul>
+<li><p>147 ports replied with: <b>no-responses</b></p></li>
+<li><p>7 ports replied with: <b>admin-prohibiteds</b></p></li>
+</ul>
+<table id="porttable_192.168.100.248" cellspacing="1">
+<tr class="head">
+<td colspan="2">Port</td>
+<td>State 
+          <a href="javascript:togglePorts('porttable_192.168.100.248','closed');"><span class="noprint"><small> (toggle closed [0] </small></span></a><a href="javascript:togglePorts('porttable_192.168.100.248','filtered');"><span class="noprint"><small> | filtered [0])</small></span></a>
+</td>
+<td>Service</td>
+<td>Reason</td>
+<td>Product</td>
+<td>Version</td>
+<td>Extra info</td>
+</tr>
+
+
+
+
+
+
+<tr class="open">
+<td>22</td>
+<td>tcp</td>
+<td>open</td>
+<td>ssh </td>
+<td>syn-ack</td>
+<td>OpenSSH </td>
+<td>8.7 </td>
+<td>protocol 2.0 </td>
+</tr>
+<tr class="open">
+<td>8080</td>
+<td>tcp</td>
+<td>open</td>
+<td>http-proxy </td>
+<td>syn-ack</td>
+<td> </td>
+<td> </td>
+<td> </td>
+</tr>
+<tr class="script">
+<td></td>
+<td>fingerprint-strings </td>
+<td colspan="6"><pre>
+  FourOhFourRequest: 
+    HTTP/1.1 404 
+    Vary: Origin
+    Vary: Access-Control-Request-Method
+    Vary: Access-Control-Request-Headers
+    Content-Disposition: inline;filename=f.txt
+    Content-Type: application/json
+    Date: Sat, 11 Jun 2022 18:26:56 GMT
+    Connection: close
+    {"timestamp":"2022-06-11T18:26:56.996+00:00","status":404,"error":"Not Found","path":"/nice%20ports%2C/Tri%6Eity.txt%2ebak"}
+  GetRequest: 
+    HTTP/1.1 404 
+    Vary: Origin
+    Vary: Access-Control-Request-Method
+    Vary: Access-Control-Request-Headers
+    Content-Type: application/json
+    Date: Sat, 11 Jun 2022 18:26:56 GMT
+    Connection: close
+    {"timestamp":"2022-06-11T18:26:56.957+00:00","status":404,"error":"Not Found","path":"/"}
+  HTTPOptions: 
+    HTTP/1.1 404 
+    Vary: Origin
+    Vary: Access-Control-Request-Method
+    Vary: Access-Control-Request-Headers
+    Content-Type: application/json
+    Date: Sat, 11 Jun 2022 18:26:56 GMT
+    Connection: close
+    {"timestamp":"2022-06-11T18:26:56.966+00:00","status":404,"error":"Not Found","path":"/"}
+  RTSPRequest, Socks5: 
+    HTTP/1.1 400 
+    Content-Type: text/html;charset=utf-8
+    Content-Language: en
+    Content-Length: 435
+    Date: Sat, 11 Jun 2022 18:26:56 GMT
+    Connection: close
+    &lt;!doctype html&gt;&lt;html lang="en"&gt;&lt;head&gt;&lt;title&gt;HTTP Status 400 
+    Request&lt;/title&gt;&lt;style type="text/css"&gt;body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-color:#525D76;} h1 {font-size:22px;} h2 {font-size:16px;} h3 {font-size:14px;} p {font-size:12px;} a {color:black;} .line {height:1px;background-color:#525D76;border:none;}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;HTTP Status 400 
+    Request&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt; </pre></td>
+</tr>
+<tr class="script">
+<td></td>
+<td>http-title </td>
+<td colspan="6"><pre>Site doesn't have a title (application/json). </pre></td>
+</tr>
+</table>
+<h3>Remote Operating System Detection</h3>
+<ul>
+<li>Used port: <b>22/tcp</b> (<b>open</b>)  </li>
+<li>Used port: <b>1025/tcp</b> (<b>closed</b>)  </li>
+<li>Used port: <b>40910/udp</b> (<b>closed</b>)  </li>
+<li>OS match: <b>Linux 2.6.32</b> (<b>96%</b>)</li>
+<li>OS match: <b>Linux 3.2 - 4.9</b> (<b>96%</b>)</li>
+<li>OS match: <b>Linux 2.6.32 - 3.10</b> (<b>96%</b>)</li>
+<li>OS match: <b>Linux 3.4 - 3.10</b> (<b>95%</b>)</li>
+<li>OS match: <b>Linux 3.1</b> (<b>95%</b>)</li>
+<li>OS match: <b>Linux 3.2</b> (<b>95%</b>)</li>
+<li>OS match: <b>AXIS 210A or 211 Network Camera (Linux 2.6.17)</b> (<b>94%</b>)</li>
+<li>OS match: <b>Linux 2.6.32 - 2.6.35</b> (<b>94%</b>)</li>
+<li>OS match: <b>Linux 2.6.32 - 3.5</b> (<b>94%</b>)</li>
+<li>OS match: <b>Linux 2.6.32 - 3.13</b> (<b>93%</b>)</li>
+</ul>
+<ul><li class="noprint">OS identified but the fingerprint was requested at scan time. 
+          
+        <a href="javascript:toggle('osblock_192.168.100.248');"><span class="noprint"><small> (click to expand)</small></span></a>
+</li></ul>
+<div id="osblock_192.168.100.248" class="hidden"><table class="noprint" cellspacing="1">
+<tr class="head"><td>Operating System fingerprint</td></tr>
+<tr><td><pre>OS:SCAN(V=7.80%E=4%D=6/11%OT=22%CT=1025%CU=40910%PV=Y%DS=1%DC=D%G=Y%M=08002
+OS:7%TM=62A4DE81%P=x86_64-pc-linux-gnu)SEQ(SP=104%GCD=1%ISR=10E%TI=Z%CI=Z%I
+OS:I=I%TS=A)SEQ(SP=104%GCD=1%ISR=10E%TI=Z%CI=Z%TS=A)OPS(O1=M5B4ST11NW7%O2=M
+OS:5B4ST11NW7%O3=M5B4NNT11NW7%O4=M5B4ST11NW7%O5=M5B4ST11NW7%O6=M5B4ST11)WIN
+OS:(W1=FE88%W2=FE88%W3=FE88%W4=FE88%W5=FE88%W6=FE88)ECN(R=Y%DF=Y%T=40%W=FAF
+OS:0%O=M5B4NNSNW7%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%A=S+%F=AS%RD=0%Q=)T2(R=N)T3(
+OS:R=N)T4(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T5(R=Y%DF=Y%T=40%W=0%S=Z
+OS:%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T7(R=Y
+OS:%DF=Y%T=41%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=Y%DF=N%T=40%IPL=164%UN=0%RI
+OS:PL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%T=40%CD=S)
+</pre></td></tr>
+</table></div>
+
+
+
+
+
+
+
+<br><a href="javascript:toggle('metrics_192.168.100.248');">
+    Misc Metrics <span class="noprint"><small> (click to expand)</small></span></a><div id="metrics_192.168.100.248" class="hidden"><table cellspacing="1">
+<tr class="head">
+<td>Metric</td>
+<td>Value</td>
+</tr>
+<tr>
+<td>Ping Results</td>
+<td>arp-response</td>
+</tr>
+<tr>
+<td>System Uptime</td>
+<td>2711796 seconds  (last reboot: Wed May 11 11:10:37 2022)
+        </td>
+</tr>
+<tr>
+<td>Network Distance</td>
+<td>1 hops</td>
+</tr>
+<tr>
+<td>TCP Sequence Prediction</td>
+<td>Difficulty=260 (Good luck!)</td>
+</tr>
+<tr>
+<td>IP ID Sequence Generation</td>
+<td>All zeros</td>
+</tr>
+</table></div>
+</div>
+</div>
+<div id="menubox" class="noprint">
+<a href="#top"><small>Go to top</small></a><br><a href="javascript:toggleAll('closed');"><small>Toggle Closed Ports</small></a><br><a href="javascript:toggleAll('filtered');"><small>Toggle Filtered Ports</small></a>
+</div>
+</body>
+</html>
