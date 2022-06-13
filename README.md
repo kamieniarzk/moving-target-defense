@@ -2,6 +2,9 @@
 ![](readme/sys-diagram.png)
 
 
+## Testing results data
+All the testing results raw data (as well as excel generated charts) are in the corresponding catalogs in the directory `tests`.
+
 ### Example DNAT/SNAT routing
 ```shell
 sudo iptables \
