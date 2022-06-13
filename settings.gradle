@@ -1,4 +1,4 @@
-rootProject.name = 'spzc'
+rootProject.name = 'moving-target-defense'
 include 'service'
 include 'daemon'
 
