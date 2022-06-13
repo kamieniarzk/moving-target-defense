@@ -21,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import spzc.daemon.domain.ServiceInstance;
 import spzc.daemon.domain.ServiceInstancePropertiesList;
 import spzc.daemon.domain.ServiceInstancePropertiesList.HealthCheckProperties;
-import spzc.daemon.domain.ServiceInstancePropertiesList.ServiceInstanceProperties;
 
 @Slf4j
 @Service
